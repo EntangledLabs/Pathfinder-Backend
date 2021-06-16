@@ -1,9 +1,8 @@
 from flask import Flask
-from flask_socketio import SocketIO, emit, join_room, leave_room, send
+from flask_socketio import SocketIO, emit, send
 from dotenv import load_dotenv
 import os
 
-from puser import PathfinderUser, get_user
 #++++++++++++++++++++++++++++++++++++++++++#
 #              Initialization              #
 #++++++++++++++++++++++++++++++++++++++++++#
@@ -30,25 +29,9 @@ def hello_world():
 #                WebSocket                 #
 #++++++++++++++++++++++++++++++++++++++++++#
 
-# Connection and authentication
-
-@socketio.on('connect')
-def on_connect(auth):
-    pass
-
-@socketio.on('disconnect')
-def on_disconnect(auth):
-    pass
-
-# Channel connection
-
-@socketio.on('join')
-def on_join(data):
-    pass
-
-@socketio.on('leave')
-def on_leave(data):
-    pass
+@socketio.on('send message')
+def handle_message_send(data):
+    emit('receive message', data, broadcast=True)
 
 
 if __name__ == '__main__':
