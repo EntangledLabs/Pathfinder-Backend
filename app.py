@@ -1,9 +1,9 @@
-from flask import Flask, session
-from flask_socketio import SocketIO, emit
-from flask_login import LoginManager
+from flask import Flask
+from flask_socketio import SocketIO, emit, join_room, leave_room, send
 from dotenv import load_dotenv
 import os
 
+from puser import PathfinderUser, get_user
 #++++++++++++++++++++++++++++++++++++++++++#
 #              Initialization              #
 #++++++++++++++++++++++++++++++++++++++++++#
@@ -13,14 +13,10 @@ load_dotenv()
 
 # Flask server init
 app = Flask(__name__)
-app.secret_key = bytes(os.getenv('SERVER_SECRET'))
+app.config['SECRET_KEY'] = os.getenv('SERVER_SECRET')
 
 # WebSockets init
 socketio = SocketIO(app)
-
-# Flask-Login init
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 #++++++++++++++++++++++++++++++++++++++++++#
 #                 Routing                  #
@@ -34,10 +30,26 @@ def hello_world():
 #                WebSocket                 #
 #++++++++++++++++++++++++++++++++++++++++++#
 
-@socketio.event
-def my_event(message):
-    emit('my response', {'data': 'got it!'})
+# Connection and authentication
 
-#++++++++++++++++++++++++++++++++++++++++++#
-#              Authentication              #
-#++++++++++++++++++++++++++++++++++++++++++#
+@socketio.on('connect')
+def on_connect(auth):
+    pass
+
+@socketio.on('disconnect')
+def on_disconnect(auth):
+    pass
+
+# Channel connection
+
+@socketio.on('join')
+def on_join(data):
+    pass
+
+@socketio.on('leave')
+def on_leave(data):
+    pass
+
+
+if __name__ == '__main__':
+    socketio.run(app, debug=True)
